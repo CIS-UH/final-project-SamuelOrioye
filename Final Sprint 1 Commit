@@ -1,0 +1,300 @@
+from flask import Flask, Blueprint, request, jsonify
+import mysql.connector
+
+# Database credentials
+def get_db_connection():
+    conn = mysql.connector.connect(
+        host='cis2368fall.cj86u2wm4bbu.us-east-1.rds.amazonaws.com',  # RDS endpoint
+        user='admin',  # RDS username
+        password='cis2368Fall4568',  # RDS password
+        database='cis2368falldb'  # Database name
+    )
+    return conn
+
+
+
+# Investor routes
+investor_blueprint = Blueprint('investor_blueprint', __name__)
+
+CREATE_INVESTOR = "INSERT INTO investors (firstname, lastname) VALUES (%s, %s)"
+GET_ALL_INVESTORS = "SELECT * FROM investors"
+GET_INVESTOR_BY_ID = "SELECT * FROM investors WHERE id = %s"
+UPDATE_INVESTOR = "UPDATE investors SET firstname = %s, lastname = %s WHERE id = %s"
+DELETE_INVESTOR = "DELETE FROM investors WHERE id = %s"
+
+@investor_blueprint.route('/investors', methods=['GET'])
+def get_investors():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_ALL_INVESTORS)
+    investors = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(investors)
+
+@investor_blueprint.route('/investor/<int:id>', methods=['GET'])
+def get_investor(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_INVESTOR_BY_ID, (id,))
+    investor = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return jsonify(investor)
+
+@investor_blueprint.route('/investor', methods=['POST'])
+def create_investor():
+    data = request.json
+    firstname = data['firstname']
+    lastname = data['lastname']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(CREATE_INVESTOR, (firstname, lastname))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Investor created successfully'}), 201
+
+@investor_blueprint.route('/investor/<int:id>', methods=['PUT'])
+def update_investor(id):
+    data = request.json
+    firstname = data['firstname']
+    lastname = data['lastname']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(UPDATE_INVESTOR, (firstname, lastname, id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Investor updated successfully'})
+
+@investor_blueprint.route('/investor/<int:id>', methods=['DELETE'])
+def delete_investor(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(DELETE_INVESTOR, (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Investor deleted successfully'})
+
+
+# Stock routes
+stock_blueprint = Blueprint('stock_blueprint', __name__)
+
+CREATE_STOCK = "INSERT INTO stocks (stockname, abbreviation, currentprice) VALUES (%s, %s, %s)"
+GET_ALL_STOCKS = "SELECT * FROM stocks"
+UPDATE_STOCK = "UPDATE stocks SET stockname = %s, abbreviation = %s, currentprice = %s WHERE id = %s"
+DELETE_STOCK = "DELETE FROM stocks WHERE id = %s"
+
+@stock_blueprint.route('/stocks', methods=['GET'])
+def get_stocks():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_ALL_STOCKS)
+    stocks = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(stocks)
+
+@stock_blueprint.route('/stock', methods=['POST'])
+def create_stock():
+    data = request.json
+    stockname = data['stockname']
+    abbreviation = data['abbreviation']
+    currentprice = data['currentprice']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(CREATE_STOCK, (stockname, abbreviation, currentprice))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Stock created successfully'}), 201
+
+@stock_blueprint.route('/stock/<int:id>', methods=['PUT'])
+def update_stock(id):
+    data = request.json
+    stockname = data['stockname']
+    abbreviation = data['abbreviation']
+    currentprice = data['currentprice']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(UPDATE_STOCK, (stockname, abbreviation, currentprice, id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Stock updated successfully'})
+
+@stock_blueprint.route('/stock/<int:id>', methods=['DELETE'])
+def delete_stock(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(DELETE_STOCK, (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Stock deleted successfully'})
+
+
+# Bond routes
+bond_blueprint = Blueprint('bond_blueprint', __name__)
+
+CREATE_BOND = "INSERT INTO bonds (bondname, abbreviation, currentprice) VALUES (%s, %s, %s)"
+GET_ALL_BONDS = "SELECT * FROM bonds"
+UPDATE_BOND = "UPDATE bonds SET bondname = %s, abbreviation = %s, currentprice = %s WHERE id = %s"
+DELETE_BOND = "DELETE FROM bonds WHERE id = %s"
+
+@bond_blueprint.route('/bonds', methods=['GET'])
+def get_bonds():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_ALL_BONDS)
+    bonds = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(bonds)
+
+@bond_blueprint.route('/bond', methods=['POST'])
+def create_bond():
+    data = request.json
+    bondname = data['bondname']
+    abbreviation = data['abbreviation']
+    currentprice = data['currentprice']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(CREATE_BOND, (bondname, abbreviation, currentprice))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Bond created successfully'}), 201
+
+@bond_blueprint.route('/bond/<int:id>', methods=['PUT'])
+def update_bond(id):
+    data = request.json
+    bondname = data['bondname']
+    abbreviation = data['abbreviation']
+    currentprice = data['currentprice']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(UPDATE_BOND, (bondname, abbreviation, currentprice, id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Bond updated successfully'})
+
+@bond_blueprint.route('/bond/<int:id>', methods=['DELETE'])
+def delete_bond(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(DELETE_BOND, (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Bond deleted successfully'})
+
+
+# Transaction routes
+transaction_blueprint = Blueprint('transaction_blueprint', __name__)
+
+CREATE_STOCK_TRANSACTION = "INSERT INTO stock_transactions (investorid, stockid, quantity) VALUES (%s, %s, %s)"
+CREATE_BOND_TRANSACTION = "INSERT INTO bond_transactions (investorid, bondid, quantity) VALUES (%s, %s, %s)"
+GET_STOCK_TRANSACTIONS = "SELECT * FROM stock_transactions WHERE investorid = %s"
+GET_BOND_TRANSACTIONS = "SELECT * FROM bond_transactions WHERE investorid = %s"
+DELETE_STOCK_TRANSACTION = "DELETE FROM stock_transactions WHERE id = %s"
+DELETE_BOND_TRANSACTION = "DELETE FROM bond_transactions WHERE id = %s"
+
+# Get all stock transactions for a specific investor
+@transaction_blueprint.route('/investor/<int:investor_id>/stocktransactions', methods=['GET'])
+def get_stock_transactions(investor_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_STOCK_TRANSACTIONS, (investor_id,))
+    transactions = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(transactions)
+
+# Get all bond transactions for a specific investor
+@transaction_blueprint.route('/investor/<int:investor_id>/bondtransactions', methods=['GET'])
+def get_bond_transactions(investor_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(GET_BOND_TRANSACTIONS, (investor_id,))
+    transactions = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(transactions)
+
+# Create a new stock transaction
+@transaction_blueprint.route('/stocktransaction', methods=['POST'])
+def create_stock_transaction():
+    data = request.json
+    investorid = data['investorid']
+    stockid = data['stockid']
+    quantity = data['quantity']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(CREATE_STOCK_TRANSACTION, (investorid, stockid, quantity))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Stock transaction created successfully'}), 201
+
+# Create a new bond transaction
+@transaction_blueprint.route('/bondtransaction', methods=['POST'])
+def create_bond_transaction():
+    data = request.json
+    investorid = data['investorid']
+    bondid = data['bondid']
+    quantity = data['quantity']
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(CREATE_BOND_TRANSACTION, (investorid, bondid, quantity))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Bond transaction created successfully'}), 201
+
+# Delete a stock transaction
+@transaction_blueprint.route('/stocktransaction/<int:id>', methods=['DELETE'])
+def delete_stock_transaction(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(DELETE_STOCK_TRANSACTION, (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Stock transaction deleted successfully'})
+
+# Delete a bond transaction
+@transaction_blueprint.route('/bondtransaction/<int:id>', methods=['DELETE'])
+def delete_bond_transaction(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(DELETE_BOND_TRANSACTION, (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Bond transaction deleted successfully'})
+
+
+# Initialize Flask app
+app = Flask(__name__)
+
+# Register Blueprints
+app.register_blueprint(investor_blueprint)
+app.register_blueprint(stock_blueprint)
+app.register_blueprint(bond_blueprint)
+app.register_blueprint(transaction_blueprint)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
