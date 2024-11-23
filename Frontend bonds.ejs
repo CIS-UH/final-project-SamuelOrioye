@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonds</title>
+  <link rel="stylesheet" href="/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+  <h1>Bonds</h1>
+
+  <!-- Check if bonds data exists and is not empty -->
+  <% if (bonds && bonds.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Bond Name</th>
+          <th>Abbreviation</th>
+          <th>Current Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bonds.forEach(bond => { %>
+          <tr>
+            <td><%= bond.bondname %></td>
+            <td><%= bond.abbreviation %></td>
+            <td><%= bond.currentprice %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <!-- Message displayed when no bonds are available -->
+    <p>No bonds found.</p>
+  <% } %>
+
+</body>
+</html>
