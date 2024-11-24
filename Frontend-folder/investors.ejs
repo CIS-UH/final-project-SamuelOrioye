@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Investors</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Investors</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% investors.forEach(investor => { %>
+        <tr>
+          <td><%= investor.firstname %></td>
+          <td><%= investor.lastname %></td>
+          <td>
+            <button>Edit</button>
+            <button>Delete</button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
