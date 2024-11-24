@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Investor Portfolio</h1>
+  <h2>Stocks</h2>
+  <ul>
+    <% portfolio.stocks.forEach(stock => { %>
+      <li><%= stock.stockname %>: <%= stock.quantity %></li>
+    <% }) %>
+  </ul>
+  <h2>Bonds</h2>
+  <ul>
+    <% portfolio.bonds.forEach(bond => { %>
+      <li><%= bond.bondname %>: <%= bond.quantity %></li>
+    <% }) %>
+  </ul>
+</body>
+</html>
