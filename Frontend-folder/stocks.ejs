@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Stocks</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Stocks</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Stock Name</th>
+        <th>Abbreviation</th>
+        <th>Current Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% stocks.forEach(stock => { %>
+        <tr>
+          <td><%= stock.stockname %></td>
+          <td><%= stock.abbreviation %></td>
+          <td><%= stock.currentprice %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
